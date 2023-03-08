@@ -1,13 +1,9 @@
 
 
 *===================================================================================*
-* Sintaxis para estimar el número de afiliados y beneficiarios potenciales			*
-* atendidos en establecimientos de Salud del IESS con el uso de la 					*
-* Encuesta Nacional de Salud y Nutrición											*
-*																	    			*
-* Fecha de elaboración:        	8 de noviembre de 2018				 				*
-* Fecha Última modificación:   	9 de noviembre de 2019								*
-* Fecha de entrega:				9 de noviembre de 2019  	 			   			*
+* Sintaxis para estimar el nÃºmero de afiliados y beneficiarios potenciales			    *
+* atendidos en establecimientos de Salud del IESS con el uso de la 					        *
+* Encuesta Nacional de Salud y NutriciÃ³n											                      *
 *===================================================================================*
 * Elaborado por:																	
 * VELASCO, CARLOS
@@ -23,14 +19,14 @@ set more off
 Variables a usarse:
 
 pse01: pse01. es afiliado o aporta al
-pd06: parentesco con el jefe(a) de hogar, serviría para identificar a los potenciales beneficiarios.
-ps08: ps08. a dónde acudió por la enfermedad
-ps29: ps29. dónde estuvo hospitalizado
-ps41: ps41. a dónde acudió para hacerse chequear
-ps57: ps57. dónde estuvo hospitalizado la última vez
+pd06: parentesco con el jefe(a) de hogar, servirÃ­a para identificar a los potenciales beneficiarios.
+ps08: ps08. a dÃ³nde acudiÃ³ por la enfermedad
+ps29: ps29. dÃ³nde estuvo hospitalizado
+ps41: ps41. a dÃ³nde acudiÃ³ para hacerse chequear
+ps57: ps57. dÃ³nde estuvo hospitalizado la Ãºltima vez
 */
 
-global dir "C:\Users\GILDA GUTIERREZ\Desktop\An_Encuestas\Bases_trabajo"
+global dir "D:\Pac_IESS\An_Encuestas\Bases_trabajo"
 cd "${dir}
 
 use ensanut_cnecs.dta, clear
@@ -76,9 +72,9 @@ drop lhog
 label var hog "Hogar - ENSANUT 2012"
 
 gen idhogar= dpa_parr+dpa_zona+dpa_sector+viv+hog
-label var idhogar "Identificación del hogar - ENSANUT 2012"
+label var idhogar "IdentificaciÃ³n del hogar - ENSANUT 2012"
 
-/*Persona con afiliación a cualquiera de los 3 seguros del IESS:
+/*Persona con afiliaciÃ³n a cualquiera de los 3 seguros del IESS:
 General, Voluntario o Social Campesino
 
 Los 3 seguros tienen derecho a usar los establecimientos del Seguro General de Salud*/
@@ -102,7 +98,7 @@ replace iess_hog=1 if iess_hog>0
 replace iess_hog=0 if iess_hog==.
 label var iess_hog "Hogares con al menos un Jefe de hogar o Conyuge afiliado al IESS"
 
-*** Potenciales Beneficiarios: conyuges e hijos menores de 18 años***
+*** Potenciales Beneficiarios: conyuges e hijos menores de 18 aÃ±os***
 gen iess_benf=1 if (iess_af!=1 & iess_hog==1)&(pd06==2|(pd06==3&pd03<18))
 replace iess_benf=0 if iess_benf==.
 label var iess_benf "Conyuges o Hijos menores de 18 potenciales beneficiarios del Seguro de Salud"
@@ -120,12 +116,12 @@ gen ce=1 if (ps08==5|ps08==6)|(ps41==5&ps41==6)
 replace ce=0 if ce==.
 label var ce "Personas atendidas en Consulta Externa"
 
-***Hospitalización***
+***HospitalizaciÃ³n***
 gen ho=1 if (ps29==2 | ps57==2)
 replace ho=0 if ho==.
-label var ho "Personas atendidas en Hospitalización"
+label var ho "Personas atendidas en HospitalizaciÃ³n"
 
-***Afiliados y beneficiarios que recibieron al menos una (1) atención en un establecimiento del IESS***
+***Afiliados y beneficiarios que recibieron al menos una (1) atenciÃ³n en un establecimiento del IESS***
 gen pac_at=1 if (ho==1|ce==1)
 replace pac_at=0 if pac_at==.
 label var pac_at "Personas atendidas en un establecimiento del IESS"
@@ -139,12 +135,12 @@ gen ce_iess=1 if af_benf_iess==1 & ((ps08==5|ps08==6)|(ps41==5&ps41==6))
 replace ce_iess=0 if ce_iess==.
 label var ce_iess "Afiliados y Beneficiarios IESS atendidos en Consulta Externa"
 
-***IESS - Hospitalización***
+***IESS - HospitalizaciÃ³n***
 gen ho_iess=1 if af_benf_iess==1 & (ps29==2 | ps57==2)
 replace ho_iess=0 if ho_iess==.
-label var ho_iess "Afiliados y Beneficiarios IESS atendidos en Hospitalización"
+label var ho_iess "Afiliados y Beneficiarios IESS atendidos en HospitalizaciÃ³n"
 
-***Afiliados y beneficiarios que recibieron al menos una (1) atención en un establecimiento del IESS***
+***Afiliados y beneficiarios que recibieron al menos una (1) atenciÃ³n en un establecimiento del IESS***
 gen pac_iess=1 if af_benf_iess==1 & (ho==1|ce==1)
 replace pac_iess=0 if pac_iess==.
 label var pac_iess "Afiliados y Beneficiarios IESS atendidos en un establecimiento del IESS"
@@ -161,7 +157,7 @@ tabout dpa_prov pse01 [iw=pw] if iess_af==1 using af.txt , cells (freq row) repl
 *Beneficiarios
 tabout dpa_prov iess_benf [iw=pw] if iess_benf==1 using benef.txt , cells (freq row) replace
 
-*Personas atendidas por afiliación al IESS y servicio
+*Personas atendidas por afiliaciÃ³n al IESS y servicio
 tabout ce af_benf_iess [iw=pw] using ce.txt , cells (freq row) replace
 tabout ho af_benf_iess [iw=pw] using ho.txt , cells (freq row) replace
 tabout pac_at af_benf_iess [iw=pw] using pa_at.txt , cells (freq row) replace
