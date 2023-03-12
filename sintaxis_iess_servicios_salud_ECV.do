@@ -1,10 +1,10 @@
 
 
 *===================================================================================*
-* Sintaxis para estimar el número de afiliados y beneficiarios potenciales			*
-* atendidos en establecimientos de Salud del IESS con el uso de la 					*
-* Encuesta de Condiciones de Vida 2013 - 2014										*
-*																	    			*
+* Sintaxis para estimar el número de afiliados y beneficiarios potenciales			    *
+* atendidos en establecimientos de Salud del IESS con el uso de la 					        *
+* Encuesta de Condiciones de Vida 2013 - 2014									                    	*
+*																	    			                                        *
 *===================================================================================*
 * Elaborado por:																	
 * VELASCO, CARLOS
